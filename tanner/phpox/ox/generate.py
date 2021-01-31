@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+# Copyright (C) 2015 Lukas Rist
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+import random
+import functions
+from replacement import shell_sandbox
+from php import utils as php_utils
+
+
+def output(s):
+    print(s)
+
+php_utils = php_utils.UtilFunctions()
+FUNCTIONS = functions.FUNCTIONS
+
+output("<?php\nif(!extension_loaded('bfr')) {\n\tdl('bfr.so');\n}\n")
+output("error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);\n\n")
+output(php_utils.gen_utils_functions())
+output(shell_sandbox.shell_sandbox())
+for function, return_val in FUNCTIONS.items():
+    parts = function.split(";")
+    function_name = parts[0]
+    function_args = ", ".join(parts[1:-1])
+    rand_int = random.randint(100, 999)
+    output("rename_function('%s', '%s_%s');" % (function_name,
+                                                function_name, rand_int))
+    output("override_function('%s', '%s', 'return %s_rep(%s);');" %
+           (function_name, function_args, function_name, function_args))
+    output("function %s_rep(%s) {" % (function_name, function_args))
+    output("\t$rand = '%s';" % rand_int)
+    if return_val == "None":
+        return_val = "\treturn;"
+    output(return_val)
+    output("}")
+
+find_irc_server = php_utils.get_symbol('find_irc_server')
+output("%s($argv[1]);\n" % find_irc_server)
+php_utils.clean()
+
+output("\ninclude $argv[1];\n?>")

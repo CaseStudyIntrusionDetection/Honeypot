@@ -1,0 +1,28 @@
+version: '2.3'
+
+networks:
+  tanner_snare_connect:
+    external: true
+
+services:
+
+# Snare service
+  snare:
+    build: .
+    container_name: snare
+    restart: unless-stopped
+    stop_signal: SIGINT
+    tty: true
+    networks:
+     - tanner_snare_connect
+    volumes: 
+      - ./website/:/var/www/website/
+      - ./snare_collected/:/opt/snare_collected/
+    ports:
+     - "80:80"
+    environment: 
+      - PAGE_LOCATION=http://target/
+      - TANNER=tanner
+      - DEV_MODE=false
+    cpu_count: 2
+    mem_limit: 6G

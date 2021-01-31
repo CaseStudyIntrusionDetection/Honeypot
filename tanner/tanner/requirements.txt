@@ -1,0 +1,15 @@
+aiohttp
+aiomysql
+aiohttp_jinja2==1.1.0
+mimesis<3.0.0
+yarl
+redis
+aioredis
+uvloop
+pymongo
+pylibinjection
+jinja2
+pycodestyle
+geoip2
+pyjwt
+pyyaml
