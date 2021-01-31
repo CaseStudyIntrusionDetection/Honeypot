@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Snare:"
-cd ../../snare
+cd ./snare
 docker-compose stop 
 
 echo "Website target:"
