@@ -2,16 +2,18 @@
 
 ## Tools
 ### Tanner
-> Safe executions environment for *hacks*.
+> Safe executions environment for *hacks*.  
+> https://github.com/mushorg/tanner
 
 #### Used Sources
--  PHP OX: PHP Sandbox
+- PHP OX: PHP Sandbox
 	- (Better) Function Replacer for PHP ([PHP License](https://github.com/CaseStudyIntrusionDetection/Honeypot/blob/master/tanner/phpox/BFR/LICENSE))
 - Redis: Key value storage used by tanner
 - Alpine Linux: as environment for command and file injections
 
 ### Snare
-> Website proxy to make it a target.
+> Website proxy to make it a target.  
+> https://github.com/mushorg/snare
 
 ## Run
 > Run both via docker-compose
